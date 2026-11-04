@@ -1,0 +1,131 @@
+/* Космический фон: мягкие градиенты, далёкая солнечная система и метеоры.
+   Анимируются только transform/opacity — это дёшево для GPU. */
+.space-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -8%, rgba(135, 95, 52, 0.2) 0%, rgba(100, 70, 38, 0.13) 25%, rgba(65, 45, 25, 0.07) 50%, transparent 100%),
+    radial-gradient(ellipse 70% 45% at 85% 20%, rgba(110, 75, 40, 0.1) 0%, transparent 80%),
+    radial-gradient(ellipse 65% 40% at 15% 75%, rgba(85, 55, 30, 0.09) 0%, transparent 80%),
+    var(--bg);
+}
+.space-bg::before {
+  content: "";
+  position: absolute;
+  inset: -120px;
+  opacity: 0.16;
+  background-image:
+    radial-gradient(circle, rgba(230, 205, 150, 0.5) 0%, transparent 2px),
+    radial-gradient(circle, rgba(200, 165, 105, 0.45) 0%, transparent 2.2px),
+    radial-gradient(circle, rgba(215, 185, 125, 0.45) 0%, transparent 2.4px);
+  background-size: 193px 211px, 277px 243px, 331px 291px;
+  background-position: 13px 27px, 79px 101px, 211px 49px;
+  animation: dust-drift 70s linear infinite;
+  will-change: transform;
+}
+@keyframes dust-drift { to { transform: translate3d(100px, -80px, 0); } }
+
+.solar {
+  position: absolute;
+  top: 70px;
+  right: max(4%, calc(50% - 560px));
+  width: 240px;
+  height: 240px;
+  transform: perspective(700px) rotateX(68deg) rotateZ(-22deg);
+  opacity: 0.75;
+}
+.solar-sun {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 14px; height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 15%, #ffebbe 45%, #e2ab54 75%, rgba(226, 171, 84, 0.3) 100%);
+  box-shadow: 0 0 14px 4px rgba(240, 190, 100, 0.6), 0 0 28px 8px rgba(215, 150, 60, 0.22);
+}
+.solar-orbit {
+  position: absolute;
+  top: 50%; left: 50%;
+  border: 1px solid rgba(225, 195, 140, 0.13);
+  border-radius: 50%;
+  animation: orbit linear infinite;
+}
+.solar-orbit-1 { width: 46px; height: 46px; animation-duration: 16s; }
+.solar-orbit-2 { width: 86px; height: 86px; animation-duration: 28s; }
+.solar-orbit-3 { width: 142px; height: 142px; animation-duration: 48s; }
+.solar-orbit-4 { width: 206px; height: 206px; animation-duration: 76s; }
+@keyframes orbit {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+.solar-planet { position: absolute; top: 0; left: 50%; border-radius: 50%; transform: translate(-50%, -50%); }
+.planet-1 { width: 3.5px; height: 3.5px; background: #e8d0a7; box-shadow: 0 0 4px rgba(232, 208, 167, 0.8); }
+.planet-2 { width: 5px; height: 5px; background: #8ec3cf; box-shadow: 0 0 6px rgba(142, 195, 207, 0.85); }
+.planet-3 { width: 4px; height: 4px; background: #db8a67; box-shadow: 0 0 5px rgba(219, 138, 103, 0.75); }
+.planet-4 { width: 7px; height: 7px; background: #deb97d; box-shadow: 0 0 6px rgba(222, 185, 125, 0.75); }
+.planet-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 15px; height: 6px;
+  margin: -3px 0 0 -7.5px;
+  border: 1px solid rgba(225, 195, 140, 0.55);
+  border-radius: 50%;
+}
+
+.shooting-star {
+  position: absolute;
+  width: 200px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #fff7e6, rgba(220, 185, 115, 0.7) 30%, transparent);
+  opacity: 0;
+  transform-origin: left center;
+  animation: shoot 9.5s ease-in infinite;
+}
+.shooting-star::before {
+  content: "";
+  position: absolute;
+  left: 0; top: -1.5px;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 10px 2px rgba(255, 245, 220, 0.85);
+}
+.s-star-1 { right: 12%; top: 3%; animation-duration: 7.8s; animation-delay: 0.5s; }
+.s-star-2 { right: 42%; top: -3%; animation-duration: 10.4s; animation-delay: 3.4s; }
+.s-star-3 { right: 70%; top: 2%; animation-duration: 8.8s; animation-delay: 6.1s; }
+.s-star-4 { right: 26%; top: 16%; animation-duration: 11.5s; animation-delay: 2.1s; }
+@keyframes shoot {
+  0% { transform: translate3d(0, 0, 0) rotate(-42deg) scaleX(0.2); opacity: 0; }
+  8% { opacity: 0.9; }
+  22% { transform: translate3d(-430px, 385px, 0) rotate(-42deg) scaleX(1); opacity: 0; }
+  100% { transform: translate3d(-430px, 385px, 0) rotate(-42deg); opacity: 0; }
+}
+
+.falling-speck {
+  position: absolute;
+  top: -20px;
+  width: 2.5px; height: 2.5px;
+  border-radius: 50%;
+  background: rgba(220, 185, 120, 0.85);
+  box-shadow: 0 0 6px 1px rgba(213, 179, 111, 0.5);
+  opacity: 0;
+  animation: fall 15s linear infinite;
+}
+.speck-1 { left: 14%; animation-duration: 16s; }
+.speck-2 { left: 32%; animation-duration: 19s; animation-delay: 4.5s; }
+.speck-3 { left: 52%; animation-duration: 14s; animation-delay: 1.8s; }
+.speck-4 { left: 78%; animation-duration: 17s; animation-delay: 7.5s; }
+@keyframes fall {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  15%, 85% { opacity: 0.7; }
+  100% { transform: translate3d(-80px, 105vh, 0); opacity: 0; }
+}
+
+@media (max-width: 720px) {
+  .solar { top: 20px; right: -60px; opacity: 0.45; transform: perspective(700px) rotateX(68deg) rotateZ(-22deg) scale(0.65); }
+  .shooting-star:nth-child(n + 4), .falling-speck:nth-child(odd) { display: none; }
+}
